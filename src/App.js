@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     getPokemons();
-  },[]);
+  });
 
   async function getPokemons() {
     const { data } = await api.get('/');
@@ -44,7 +44,6 @@ function App() {
           <Button onClick={() => goToPokemon(e.url)} key={index}>{e.name}</Button>
         ))}
       </List>
-      {/* <img src={Logo} /> */}
       <BackLeftContainer>
           {pokemons?.previous != null ? (
             <BackButton onClick={() => getNextOrPreviewsPage(pokemons.previous)}>

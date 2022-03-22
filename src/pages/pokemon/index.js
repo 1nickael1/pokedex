@@ -9,7 +9,7 @@ function Pokemon() {
 
   useEffect(() => {
     getPokemon();
-  },[]);
+  });
 
   async function getPokemon() {
     const { data } = await api.get(`/${id}`);
@@ -21,7 +21,7 @@ function Pokemon() {
       <div>
         {pokemon?.name}
         <div>
-          <img src={pokemon?.sprites?.front_default} />
+          <img alt={pokemon?.name} src={pokemon?.sprites?.front_default} />
         </div>
       </div>
   );
