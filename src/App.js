@@ -18,13 +18,14 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    async function getPokemons() {
+      const { data } = await api.get('/');
+      setPokemons(data);
+    }
     getPokemons();
-  });
+  },[]);
 
-  async function getPokemons() {
-    const { data } = await api.get('/');
-    setPokemons(data);
-  }
+  
 
   async function getNextOrPreviewsPage(url) {
     const { data } = await api.get(url);

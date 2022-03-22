@@ -8,14 +8,15 @@ function Pokemon() {
   const { id } = useParams();
 
   useEffect(() => {
+    async function getPokemon() {
+      const { data } = await api.get(`/${id}`);
+      console.log(data);
+      setPokemon(data);
+    };
     getPokemon();
-  });
+  },[id]);
 
-  async function getPokemon() {
-    const { data } = await api.get(`/${id}`);
-    console.log(data);
-    setPokemon(data);
-  };
+  
 
   return (
       <div>
