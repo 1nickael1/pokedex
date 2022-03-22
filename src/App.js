@@ -1,24 +1,72 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import { api } from './util/Api';
+import { useNavigate } from 'react-router-dom';
+
+import { 
+  Container, 
+  Button, 
+  List, 
+  BackLeftContainer,
+  BackButton,
+  BackButtonDisabled,
+  NextButton,
+  NextButtonDisabled,
+} from './styles';
 
 function App() {
+  const [pokemons, setPokemons] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getPokemons();
+  },[]);
+
+  async function getPokemons() {
+    const { data } = await api.get('/');
+    setPokemons(data);
+  }
+
+  async function getNextOrPreviewsPage(url) {
+    const { data } = await api.get(url);
+    setPokemons(data);
+  }
+
+  function goToPokemon(url) {
+    let urlList = url.split('/');
+    let id = urlList[urlList.length - 2];
+    navigate(`/pokemon/${id}`);
+  }
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <List>
+        {pokemons?.results?.map((e, index) => (
+          <Button onClick={() => goToPokemon(e.url)} key={index}>{e.name}</Button>
+        ))}
+      </List>
+      {/* <img src={Logo} /> */}
+      <BackLeftContainer>
+          {pokemons?.previous != null ? (
+            <BackButton onClick={() => getNextOrPreviewsPage(pokemons.previous)}>
+              Previews
+            </BackButton>
+          ) : (
+            <BackButtonDisabled>
+              Previews
+            </BackButtonDisabled>
+          )}
+          
+          {pokemons?.next != null ? (
+            <NextButton onClick={() => getNextOrPreviewsPage(pokemons.next)}>
+              Next
+            </NextButton>
+          ) : (
+            <NextButtonDisabled>
+              Next
+            </NextButtonDisabled>
+          )}
+      </BackLeftContainer>
+    </Container>
   );
 }
 
